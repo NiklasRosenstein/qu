@@ -89,7 +89,7 @@ class MusicFinder(object):
 
         filename = os.path.join(root, filename)
         if skip_file(filename):
-          yield (filename, None)
+          continue
 
         metadata = provider.read_metadata(filename)
         if metadata is not None:
