@@ -19,13 +19,23 @@
 # THE SOFTWARE.
 
 from sqlalchemy.orm import session, sessionmaker
+from threading import local as threadlocal
+from weakref import ref as weakref
 
 
-class SessionBase(session.Session):
+class Session(session.Session):
   """
-  Custom SQLAlchemy session class that implements the
-  Python contextmanager interface.
+  Custom SQLAlchemy session class. Supports the Python contextmanager
+  interface and a thread-local current session stack. The current
+  #Session can be retrieved using #Session.current().
   """
+
+  local = threadlocal()
+
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    self._clean_stack()
+    self.local.stack.append(weakref(self))
 
   def __enter__(self):
     return self
@@ -44,14 +54,38 @@ class SessionBase(session.Session):
       self.close()
 
   @classmethod
-  def bind(cls, bind, **kwargs):
+  def bind(cls, bind, *args, **kwargs):
     """
-    Create a session bound to the engine #bind. This method
-    simply wraps the #sessionmaker function.
+    Creates a new subclass of the specified #cls which automatically
+    constructs using the specified arguments. This is different from
+    the #sqlalchemy.orm.sessionmaker() function in that it returns an
+    actual class object that inherits from #cls.
     """
 
-    return sessionmaker(bind=bind, class_=cls, **kwargs)
+    class Session(cls):
+      def __init__(self):
+        super().__init__(bind=bind, *args, **kwargs)
+    return Session
 
+  @staticmethod
+  def _clean_stack():
+    local = Session.local
+    if not hasattr(local, 'stack'):
+      local.stack = []
+    else:
+      local.stack = [ref for ref in local.stack if ref() is not None]
 
-def new_session(bind, class_=SessionBase, *args, **kwargs):
-  return sessionmaker(bind=bind, class_=class_, *args, **kwargs)
+  @staticmethod
+  def current():
+    Session._clean_stack()
+    local = Session.local
+    if not local.stack:
+      raise RuntimeError("no current Session")
+    return local.stack[-1]()
+
+  @classmethod
+  def wraps(cls, func):
+    def decorator(*args, **kwargs):
+      with cls():
+        return func(*args, **kwargs)
+    return decorator

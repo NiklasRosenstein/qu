@@ -59,9 +59,15 @@ def string(length=None, collation=None, convert_unicode=False,
   if convert_unicode is None:
     convert_unicode = bool(unicode)
   class_ = Unicode if unicode else String
-  dtype = class_(length, collation, convert_unicode,
-    unicode_error, _warn_on_bytestring)
+  dtype = class_(length, collation=collation, convert_unicode=convert_unicode,
+    unicode_error=unicode_error, _warn_on_bytestring=_warn_on_bytestring)
   return Column(dtype, **kwargs)
+
+
+def unicode(length=None, collation=None, convert_unicode=False,
+    unicode_error=None, unicode=True, _warn_on_bytestring=True, **kwargs):
+  return string(length, collation, convert_unicode, unicode_error,
+    unicode, _warn_on_bytestring, **kwargs)
 
 
 def time(timezone=False, **kwargs):

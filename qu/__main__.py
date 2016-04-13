@@ -20,19 +20,17 @@
 
 from . import config
 from .musicfinder import MusicFinder
-from .database import Track
+from .database import syncdb
+import argparse
 
 
 def main():
-  finder = MusicFinder()
-  finder.load_extension(*config.musicfinder_extensions)
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--syncdb', action='store_true')
+  args = parser.parse_args()
 
-  # Test discovering music files.
-  for filename, metadata, provider in finder.discover(config.library_root):
-    print(filename)
-    for key, value in metadata.items():
-      print('  * {}: {}'.format(key, value))
-    print()
+  if args.syncdb:
+    syncdb()
 
 
 if __name__ == '__main__':

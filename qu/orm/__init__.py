@@ -21,5 +21,5 @@
 from .op import *
 from .columns import *
 from .entity import new_entity
-from .session import new_session
+from .session import Session
 from sqlalchemy import create_engine as new_engine

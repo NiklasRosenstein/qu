@@ -18,6 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from . import config
 from .pathutils import getsuffix
 import os
 import importlib
@@ -30,8 +31,10 @@ class MusicFinder(object):
   metadata is then returned to the user of the #MusicFinder.
   """
 
-  def __init__(self):
+  def __init__(self, init_from_config=True):
     self.providers = {}
+    if init_from_config:
+      self.load_extension(*config.musicfinder_extensions)
 
   def install_provider(self, provider, file_suffix):
     """

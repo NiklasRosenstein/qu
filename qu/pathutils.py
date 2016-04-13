@@ -27,3 +27,22 @@ def getsuffix(filename):
   if index > 0:
     return filename[index:]
   return ''
+
+
+def to_dbpath(path):
+  """
+  Normalize *path* to Unix-style format on all platforms. This is used
+  for storing paths in a database to keep the data consistent if migrated
+  to a different platform.
+  """
+
+  return path.replace('\\', '/')
+
+
+def from_dbpath(path):
+  """
+  Convert from a Unix-style path to a path appropriate for the current
+  platform. This should be used with paths from the database.
+  """
+
+  return path.replace('/', os.sep)
