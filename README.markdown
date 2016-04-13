@@ -11,6 +11,8 @@ __REQUIREMENTS__
 
 * Python 3
 * [Mutagen](https://github.com/quodlibet/mutagen)
+* [Flask](http://flask.pocoo.org/)
+* [SQLAlchemy](http://www.sqlalchemy.org/)
 
 __DEPLOYMENT__
 
