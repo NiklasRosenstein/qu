@@ -10,10 +10,15 @@ table, th, td {
 	white-space: nowrap;
 }
 #header {
+	top: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
 	background-color: #4FCDF7;
 	padding: 1em;
 }
 table#library {
+	margin-top: 3em;
 	border-collapse: collapse;
 }
 #library th {

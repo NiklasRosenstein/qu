@@ -18,9 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from qu.web import app
 from qu import config
-
+from qu.web import app
 
 if __name__ == "__main__":
-  app.run(host=config.host, port=config.port, debug=config.debug)
+  app.run(host=config.host, port=config.port, debug=True)

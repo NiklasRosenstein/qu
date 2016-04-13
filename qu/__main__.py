@@ -19,19 +19,26 @@
 # THE SOFTWARE.
 
 from . import config
-from .musicfinder import MusicFinder
-from .database import syncdb
 import argparse
+import sys, os
+import subprocess
 
 
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--syncdb', action='store_true')
+  parser.add_argument('--web', action='store_true')
   args = parser.parse_args()
 
   if args.syncdb:
+    from .database import syncdb
     syncdb()
+    return 0
+
+  if args.web:
+    from .web import app
+    app.run(host=config.host, port=config.port, debug=False)
 
 
 if __name__ == '__main__':
-  main()
+  sys.exit(main())
