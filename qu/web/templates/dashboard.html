@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"/>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+	</head>
+	<body>
+		<div id="header">
+			<b>qu Music Library</b>
+			<span>| {{ tracks|length }} Tracks | </span>
+			<audio id="audio"><source id="audio-source" src=""></audio>
+		</div>
+		<table id="library">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Title</th>
+					<th>Artist</th>
+					<th>Album</th>
+					<th>Genre</th>
+				</tr>
+				{% for track in tracks %}
+				<tr data-track-id="{{ track.id }}">
+					<td><a class="icon icon-play" href="#" onclick="play({{ track.id }}, '{{ track.mime }}')"/></td>
+					<td>{{ track.title }}</td>
+					<td>{{ track.artist or "" }}</td>
+					<td>{{ track.album or "" }}</td>
+					<td>{{ track.genre or "" }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</body>
+</html>

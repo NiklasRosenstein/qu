@@ -3,6 +3,10 @@
 from os.path import join, dirname
 here = dirname(__file__)
 
+host = '0.0.0.0'
+port = 5000
+debug = True
+
 # Extension modules for the qu.musicfinder.MusicFinder class.
 # This specifies what music file types are supported by qu.
 musicfinder_extensions = [
