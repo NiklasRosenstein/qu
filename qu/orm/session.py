@@ -18,22 +18,40 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from . import config
-from .musicfinder import MusicFinder
-from .database import Track
+from sqlalchemy.orm import session, sessionmaker
 
 
-def main():
-  finder = MusicFinder()
-  finder.load_extension(*config.musicfinder_extensions)
+class SessionBase(session.Session):
+  """
+  Custom SQLAlchemy session class that implements the
+  Python contextmanager interface.
+  """
 
-  # Test discovering music files.
-  for filename, metadata, provider in finder.discover(config.library_root):
-    print(filename)
-    for key, value in metadata.items():
-      print('  * {}: {}'.format(key, value))
-    print()
+  def __enter__(self):
+    return self
+
+  def __exit__(self, exc_value, exc_type, exc_tb):
+    """
+    Rollback on error, commit otherwise. Finally close
+    the session.
+    """
+    try:
+      if exc_value is not None:
+        self.rollback()
+      else:
+        self.commit()
+    finally:
+      self.close()
+
+  @classmethod
+  def bind(cls, bind, **kwargs):
+    """
+    Create a session bound to the engine #bind. This method
+    simply wraps the #sessionmaker function.
+    """
+
+    return sessionmaker(bind=bind, class_=cls, **kwargs)
 
 
-if __name__ == '__main__':
-  main()
+def new_session(bind, class_=SessionBase, *args, **kwargs):
+  return sessionmaker(bind=bind, class_=class_, *args, **kwargs)

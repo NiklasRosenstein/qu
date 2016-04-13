@@ -1,5 +1,8 @@
 # qu configuration file.
 
+from os.path import join, dirname
+here = dirname(__file__)
+
 # Extension modules for the qu.musicfinder.MusicFinder class.
 # This specifies what music file types are supported by qu.
 musicfinder_extensions = [
@@ -8,4 +11,8 @@ musicfinder_extensions = [
 
 # Path to your music library root directory. This directory
 # will be scanned for music.
-library_root = <enter path>
+library_root = '/Users/niklas/Music/iTunes/iTunes Media'
+
+# URL to the database that caches the library information.
+database_url = 'sqlite:///' + join(here, 'database.sqlite')
+database_encoding = 'utf-8'

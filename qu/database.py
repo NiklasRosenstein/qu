@@ -18,22 +18,38 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from . import config
-from .musicfinder import MusicFinder
-from .database import Track
+from . import orm, config
+
+engine = orm.new_engine(config.database_url, encoding=config.database_encoding)
+Entity = orm.new_entity()
+Session = orm.new_session(engine)
 
 
-def main():
-  finder = MusicFinder()
-  finder.load_extension(*config.musicfinder_extensions)
+class Track(Entity):
+  id = orm.int(primary_key = True)
 
-  # Test discovering music files.
-  for filename, metadata, provider in finder.discover(config.library_root):
-    print(filename)
-    for key, value in metadata.items():
-      print('  * {}: {}'.format(key, value))
-    print()
+  # Path to the file relative to the library root directory.
+  path = orm.string()
+
+  # Time the track information was last updated.
+  last_update_time = orm.int()
+
+  # Metadata.
+  title = orm.string()
+  artist = orm.string()
+  album = orm.string()
+  modified_by = orm.string()
+  grouping = orm.string()
+  copyright = orm.string()
+  publisher = orm.string()
+  composer = orm.string()
+  track = orm.int()
+  set = orm.int()
+  bmp = orm.int()
+  year = orm.int()
+  genre = orm.string()
+  codec = orm.string()
+  encoded_by = orm.string()
 
 
-if __name__ == '__main__':
-  main()
+Entity.metadata.create_all(engine)

@@ -18,22 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from . import config
-from .musicfinder import MusicFinder
-from .database import Track
-
-
-def main():
-  finder = MusicFinder()
-  finder.load_extension(*config.musicfinder_extensions)
-
-  # Test discovering music files.
-  for filename, metadata, provider in finder.discover(config.library_root):
-    print(filename)
-    for key, value in metadata.items():
-      print('  * {}: {}'.format(key, value))
-    print()
-
-
-if __name__ == '__main__':
-  main()
+from .op import *
+from .columns import *
+from .entity import new_entity
+from .session import new_session
+from sqlalchemy import create_engine as new_engine

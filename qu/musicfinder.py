@@ -112,11 +112,11 @@ class MetaDataProvider(object):
   * `track` - track number as `X` or `X/Y`
   * `set` - CD/set number as `X` or `X/Y`
   * `bmp` - beats per minute as number
-  * `encoded_by` - file encoder information
   * `year` - release date
   * `genre` - genre name
-  * `codec` - file codec information
   * `cover` - #MimeData object for the album cover art
+  * `codec` - file codec information
+  * `encoded_by` - file encoder information
   """
 
   def read_metadata(self, filename):
