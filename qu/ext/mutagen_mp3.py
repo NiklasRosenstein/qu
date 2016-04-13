@@ -32,6 +32,7 @@ class MutagenProvider(MetaDataProvider):
       return None
 
     metadata = {
+      'mime': 'audio/mp3',
       'title': tags.get('TIT2'),
       'artist': tags.get('TPE1'),
       'album': tags.get('TALB'),

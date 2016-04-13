@@ -21,6 +21,7 @@
 from sqlalchemy.orm import session, sessionmaker
 from threading import local as threadlocal
 from weakref import ref as weakref
+import functools
 
 
 class Session(session.Session):
@@ -85,6 +86,7 @@ class Session(session.Session):
 
   @classmethod
   def wraps(cls, func):
+    @functools.wraps(func)
     def decorator(*args, **kwargs):
       with cls():
         return func(*args, **kwargs)

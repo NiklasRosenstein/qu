@@ -31,6 +31,9 @@ Session = orm.Session.bind(engine)
 class Track(Entity):
   id = orm.int(primary_key=True)
 
+  # Mime type of the track.
+  mime = orm.string()
+
   # Path to the file relative to the library root directory.
   path = orm.unicode(unique=True)
 

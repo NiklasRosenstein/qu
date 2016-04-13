@@ -104,6 +104,7 @@ class MetaDataProvider(object):
   Interface for metadata providers that can be installed to a
   #MusicFinder object. Common metadata keys are
 
+  * `mime`- the file's mimetype
   * `title` - the track title
   * `artist` - the artist name
   * `album`- the album name
