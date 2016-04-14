@@ -24,6 +24,7 @@
 					<th onclick="sortTracks('data-track-artist')">Artist</th>
 					<th onclick="sortTracks('data-track-album')">Album</th>
 					<th onclick="sortTracks('data-track-genre')">Genre</th>
+					<th>Path</th>
 				</tr>
 				{% for track in tracks %}
 				<tr class="track" id="track-{{ track.id }}" data-track-id="{{ track.id }}"
@@ -37,6 +38,7 @@
 					<td>{{ track.artist or "" }}</td>
 					<td>{{ track.album or "" }}</td>
 					<td>{{ track.genre or "" }}</td>
+					<td>{{ track.path }}</td>
 				</tr>
 				{% endfor %}
 			</table>
