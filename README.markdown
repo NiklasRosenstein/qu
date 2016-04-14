@@ -16,6 +16,10 @@ __REQUIREMENTS__
 
 __DEPLOYMENT__
 
+    $ git clone https://github.com/NiklasRosenstein/qu.git
+    $ cd qu
+    $ virtualenv -p python3 env
+    $ pip install -r requirements.txt
     $ nano qu_config.py      # configure library_root
     $ python -m qu --syncdb  # synchronize the music file database
     # python -m qu --web     # run the web app
