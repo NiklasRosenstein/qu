@@ -19,11 +19,10 @@
 # THE SOFTWARE.
 
 from ..metadata import MetaDataProvider, MimeData
-import importlib
 import mutagen.mp3
 
 
-class MutagenProvider(MetaDataProvider):
+class MutagenMp3Provider(MetaDataProvider):
 
   def read_metadata(self, filename):
     try:
@@ -66,4 +65,4 @@ class MutagenProvider(MetaDataProvider):
 
 
 def install_metadata_provider(register_provider):
-  register_provider(MutagenProvider(), '.mp3')
+  register_provider(MutagenMp3Provider(), '.mp3')

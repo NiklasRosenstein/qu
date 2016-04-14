@@ -30,7 +30,7 @@ import os
 @app.route('/')
 @Session.wraps
 def home():
-  tracks = Session.current().query(Track).order_by(Track.title).all()
+  tracks = Session.current().query(Track).order_by(Track.grouping, Track.artist, Track.album, Track.title).all()
   return render_template('dashboard.html', tracks=tracks)
 
 

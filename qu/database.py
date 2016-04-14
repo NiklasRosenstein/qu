@@ -100,6 +100,7 @@ def check_skip_track(filename):
 def syncdb():
   print('qu syncdb')
 
+  current_time = time.time()
   new_tracks = 0
   updated_tracks = 0
   session = Session.current()
@@ -114,6 +115,10 @@ def syncdb():
       if track.id:
         # Track was already in the database. Did it change?
         if os.path.getmtime(filename) <= track.last_update_time:
+          # We'll still update the tracks modification time to know
+          # that the file existed the last time we checked.
+          track.last_update_time = current_time
+          session.add(track)
           print('.', end='')
           continue  # nope
 
@@ -134,8 +139,16 @@ def syncdb():
         print('+', end='')
         new_tracks += 1
       track.has_cover = bool(data.get('cover'))
-      track.last_update_time = time.time()
+      track.last_update_time = current_time
       session.add(track)
 
+  session.commit()
+
+  # Query all tracks that haven't been updated this round and
+  # delete these entries.
+  deleted_tracks = session.query(Track).filter(
+    Track.last_update_time != current_time).delete()
+
   print()
-  print('{} new tracks, {} updated'.format(new_tracks, updated_tracks))
+  print('{} new tracks, {} updated, {} removed'.format(
+    new_tracks, updated_tracks, deleted_tracks))
