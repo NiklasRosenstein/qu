@@ -14,8 +14,8 @@ table, th, td {
 	left: 0;
 	right: 0;
 	position: fixed;
-	background-color: #4FCDF7;
-	padding: 1em;
+	background-color: #007BDA;
+	color: white;
 }
 table#library {
 	margin-top: 3em;
@@ -36,4 +36,30 @@ table#library {
 	width: 16px;
 	height: 16px;
 	display: inline-block;
+}
+
+
+#audio {
+	margin-bottom: -10px;
+	display: inline;
+}
+#current {
+	line-height: 40px;
+}
+#current-track {
+	font-weight: bold;
+}
+#current-artist {
+}
+#current-album {
+	font-style: italic;
+}
+#current-album-pic {
+	width: 40px;
+	height: 40px;
+	background-color: black;
+	display: inline-block;
+	border: none;
+	float: left;
+	margin-right: 1em;
 }

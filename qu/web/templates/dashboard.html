@@ -7,9 +7,13 @@
 	</head>
 	<body>
 		<div id="header">
-			<b>qu Music Library</b>
-			<span>| {{ tracks|length }} Tracks | </span>
-			<audio id="audio"><source id="audio-source" src=""></audio>
+			<div id="current">
+				<img id="current-album-pic" src="/static/img/nocover.png"></img>
+				<span id="current-track">No Track</span>
+				<span id="current-artist">No Artist</span>
+				<span id="current-album">No Album</span>
+			<audio id="audio" controls="controls"></audio>
+			</div>
 		</div>
 		<table id="library">
 			<thead>
@@ -21,7 +25,9 @@
 					<th>Genre</th>
 				</tr>
 				{% for track in tracks %}
-				<tr data-track-id="{{ track.id }}">
+				<tr id="track-{{ track.id }}" data-track-id="{{ track.id }}"
+					data-track-title="{{ track.title }}", data-track-artist="{{ track.artist }}"
+					data-track-album="{{ track.album }}">
 					<td><a class="icon icon-play" href="#" onclick="play({{ track.id }}, '{{ track.mime }}')"/></td>
 					<td>{{ track.title }}</td>
 					<td>{{ track.artist or "" }}</td>

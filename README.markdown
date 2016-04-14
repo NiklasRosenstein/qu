@@ -19,3 +19,7 @@ __DEPLOYMENT__
     $ nano qu_config.py      # configure library_root
     $ python -m qu --syncdb  # synchronize the music file database
     # python -m qu --web     # run the web app
+
+__CREDITS__
+
+    qu/web/static/img/nocover.png: http://gouki113.deviantart.com/art/No-Album-Art-145001929
