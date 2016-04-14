@@ -14,8 +14,5 @@ function play(trackId, mime) {
   var currentAlbum = document.getElementById('current-album');
   currentAlbum.innerText = track.getAttribute('data-track-album');
   var currentAlbumPic = document.getElementById('current-album-pic');
-  currentAlbumPic.addEventListener('error', function () {
-    this.setAttribute('src', '/static/img/nocover.png');
-  });
   currentAlbumPic.setAttribute('src', '/pic/' + trackId);
 }

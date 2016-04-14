@@ -57,6 +57,9 @@ class Track(Entity):
   codec = orm.unicode()
   encoded_by = orm.unicode()
 
+  # True if the track has a covert art.
+  has_cover = orm.bool()
+
   @staticmethod
   def get(filename, or_create=False):
     session = Session.current()
@@ -127,6 +130,7 @@ def syncdb():
         updated_tracks += 1
       else:
         new_tracks += 1
+      track.has_cover = bool(data.get('cover'))
       track.last_update_time = time.time()
       session.add(track)
 

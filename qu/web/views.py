@@ -23,7 +23,7 @@ from .. import config
 from ..pathutils import from_dbpath
 from ..database import Session, Track
 from ..metadata import read_metadata
-from flask import request, render_template, stream_with_context, Response
+from flask import request, render_template, stream_with_context, redirect, url_for, Response
 import os
 
 
@@ -52,18 +52,11 @@ def stream(track_id):
 @Session.wraps
 def pic(track_id):
   track = Session.current().query(Track).get(track_id)
-  if not track:
-    return "Track not found", 404
-  filename = os.path.join(config.library_root, from_dbpath(track.path))
-  if not os.path.isfile(filename):
-    return "Track not found", 404
-
-  metadata = read_metadata(filename)
-  if metadata is None:
-    return "Track not found (not metadata read)", 404
-
-  if 'cover' in metadata:
-    cover = metadata['cover']
-    return Response(cover.data, 200, [('Content-type', cover.mime)])
-
-  return "No album cover", 404
+  if track:
+    filename = os.path.join(config.library_root, from_dbpath(track.path))
+    if filename:
+      metadata = read_metadata(filename)
+      if metadata and 'cover' in metadata:
+        cover = metadata['cover']
+        return Response(cover.data, 200, [('Content-type', cover.mime)])
+  return redirect(url_for('static', filename='img/nocover.png'))

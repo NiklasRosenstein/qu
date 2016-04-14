@@ -19,6 +19,7 @@
 			<thead>
 				<tr>
 					<th></th>
+					<th></th>
 					<th>Title</th>
 					<th>Artist</th>
 					<th>Album</th>
@@ -29,6 +30,7 @@
 					data-track-title="{{ track.title }}", data-track-artist="{{ track.artist }}"
 					data-track-album="{{ track.album }}">
 					<td><a class="icon icon-play" href="#" onclick="play({{ track.id }}, '{{ track.mime }}')"/></td>
+					<td><img src="/pic/{{ track.id }}" width="16" height="16"></td>
 					<td>{{ track.title }}</td>
 					<td>{{ track.artist or "" }}</td>
 					<td>{{ track.album or "" }}</td>
