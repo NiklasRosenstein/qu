@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from . import config, orm, musicfinder, pathutils
+from . import config, orm, metadata, pathutils
 import os, sys
 import logging
 import time
@@ -100,24 +100,35 @@ def syncdb():
   new_tracks = 0
   updated_tracks = 0
   session = Session.current()
-  finder = musicfinder.MusicFinder()
-  gen = finder.discover(config.library_root, check_skip_track)
-  for filename, metadata, provider in gen:
-    print('.', end='')
-    sys.stdout.flush()
-    track = Track.get(filename, or_create=True)
-    if not track.last_update_time:
-      new_tracks += 1
-    else:
-      updated_tracks += 1
 
-    # Transfer the metadata to the track.
-    for key, value in metadata.items():
-      if hasattr(track, key):
-        setattr(track, key, value)
-    track.last_update_time = time.time()
+  for root, dirs, files in os.walk(config.library_root):
+    for filename in files:
+      print('.', end='')
+      sys.stdout.flush()
+      filename = os.path.join(root, filename)
 
-    session.add(track)
+      # Check if the track is already in the database.
+      track = Track.get(filename, or_create=True)
+      if track.id:
+        # Track was already in the database. Did it change?
+        if os.path.getmtime(filename) <= track.last_update_time:
+          continue  # nope
+
+      # Read the metadata and transfer the information to the track.
+      data = metadata.read_metadata(filename)
+      if not data:
+        continue
+
+      for key, value in data.items():
+        if hasattr(track, key):
+          setattr(track, key, value)
+
+      if track.id:
+        updated_tracks += 1
+      else:
+        new_tracks += 1
+      track.last_update_time = time.time()
+      session.add(track)
 
   print()
   print('{} new tracks, {} updated'.format(new_tracks, updated_tracks))

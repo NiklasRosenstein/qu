@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from ..musicfinder import MetaDataProvider, MimeData
+from ..metadata import MetaDataProvider, MimeData
 import importlib
 import mutagen.mp3
 
@@ -65,5 +65,5 @@ class MutagenProvider(MetaDataProvider):
     return metadata
 
 
-def install_metadata_provider(finder):
-  finder.install_provider(MutagenProvider(), '.mp3')
+def install_metadata_provider(register_provider):
+  register_provider(MutagenProvider(), '.mp3')

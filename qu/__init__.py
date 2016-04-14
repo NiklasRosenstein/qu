@@ -19,3 +19,5 @@
 # THE SOFTWARE.
 
 import qu_config as config
+from . import metadata
+metadata.load_extension(*config.musicfinder_extensions)

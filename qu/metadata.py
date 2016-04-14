@@ -24,81 +24,6 @@ import os
 import importlib
 
 
-class MusicFinder(object):
-  """
-  This class implements searching for music files by adressing
-  the correct metadata provider based on the file suffix. The
-  metadata is then returned to the user of the #MusicFinder.
-  """
-
-  def __init__(self, init_from_config=True):
-    self.providers = {}
-    if init_from_config:
-      self.load_extension(*config.musicfinder_extensions)
-
-  def install_provider(self, provider, file_suffix):
-    """
-    Install a provider to the #MusicFinder for the specified
-    #file_suffix.
-
-    :param provider: #MetaDataProvider object
-    :param file_suffix: #str object starting with a period
-    :raise ValueError: if the #file_suffix is already occupied
-    """
-
-    if not isinstance(provider, MetaDataProvider):
-      raise TypeError('provider must be MetaDataProvider object')
-    if not isinstance(file_suffix, str):
-      raise TypeError('file_suffix must be str')
-    if file_suffix in self.providers:
-      raise ValueError('file_suffix "{}" already occupied'.format(file_suffix))
-
-    self.providers[file_suffix] = provider
-
-  def load_extension(self, *extensions):
-    """
-    Imports the module(s) specified by #extensions and runs its
-    `install_metadata_provider()` function, passing the #MusicFinder
-    as argument.
-    """
-
-    for ext in extensions:
-      module = importlib.import_module(ext)
-      module.install_metadata_provider(self)
-
-  def discover(self, library_root, skip_file = None):
-    """
-    This function discovers all music files in #library_root,
-    invoking the appropriate #MetaDataProvider to retrieve the
-    metadata and yields it in a tuple with the filename.
-
-    The #skip_file function is used to skip files from extracting
-    the metadata. This is useful to ignore files for which the
-    metadata is already known and it is sure that it has not changed.
-    Note that #skip_file is not called for files for which no
-    provider is installed.
-
-    :return: generator yielding `(filename, metadata, provider)`
-    """
-
-    if skip_file is None:
-      skip_file = lambda f: False
-
-    for root, dirs, files in os.walk(library_root):
-      for filename in files:
-        provider = self.providers.get(getsuffix(filename))
-        if not provider:
-          continue
-
-        filename = os.path.join(root, filename)
-        if skip_file(filename):
-          continue
-
-        metadata = provider.read_metadata(filename)
-        if metadata is not None:
-          yield (filename, metadata, provider)
-
-
 class MetaDataProvider(object):
   """
   Interface for metadata providers that can be installed to a
@@ -149,3 +74,40 @@ class MimeData(object):
   def __repr__(self):
     size = len(self.data)
     return 'MimeData(mime={!r}, len(data)={})'.format(self.mime, size)
+
+
+providers = {}
+
+
+def load_extension(*extensions):
+  """
+  Imports the module(s) specified by #extensions and runs its
+  `install_metadata_provider()` function, passing the #MusicFinder
+  as argument.
+  """
+
+  for ext in extensions:
+    module = importlib.import_module(ext)
+    module.install_metadata_provider(register_provider)
+
+
+def register_provider(provider, suffix):
+  """
+  Register a #MetaDataProvider for the specified #suffix.
+  """
+
+  providers[suffix] = provider
+
+
+def read_metadata(filename):
+  """
+  Selects the appropriate #MetaDataProvider for the specified #filename
+  and returns the metadata dictionary it extracts, or returns None if
+  no metadata could be extracted.
+  """
+
+  suffix = getsuffix(filename)
+  if suffix not in providers:
+    return None
+
+  return providers[suffix].read_metadata(filename)
