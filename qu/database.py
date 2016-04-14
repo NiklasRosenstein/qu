@@ -106,7 +106,6 @@ def syncdb():
 
   for root, dirs, files in os.walk(config.library_root):
     for filename in files:
-      print('.', end='')
       sys.stdout.flush()
       filename = os.path.join(root, filename)
 
@@ -115,11 +114,13 @@ def syncdb():
       if track.id:
         # Track was already in the database. Did it change?
         if os.path.getmtime(filename) <= track.last_update_time:
+          print('.', end='')
           continue  # nope
 
       # Read the metadata and transfer the information to the track.
       data = metadata.read_metadata(filename)
       if not data:
+        print('?', end='')
         continue
 
       for key, value in data.items():
@@ -127,8 +128,10 @@ def syncdb():
           setattr(track, key, value)
 
       if track.id:
+        print('!', end='')
         updated_tracks += 1
       else:
+        print('+', end='')
         new_tracks += 1
       track.has_cover = bool(data.get('cover'))
       track.last_update_time = time.time()
