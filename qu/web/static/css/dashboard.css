@@ -9,16 +9,24 @@ table, th, td {
 	padding: 0.3em;
 	white-space: nowrap;
 }
-#header {
-	top: 0;
+#playbar {
+	bottom: 0;
 	left: 0;
 	right: 0;
 	position: fixed;
 	background-color: #007BDA;
 	color: white;
+	white-space: nowrap;
 }
-table#library {
-	margin-top: 3em;
+#library {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 3em;
+	overflow: scroll;
+}
+#library table {
 	border-collapse: collapse;
 }
 #library th {
@@ -29,13 +37,6 @@ table#library {
 }
 #library tr:nth-child(even) {
 	background-color: #e6e6e6;
-}
-
-.icon-play {
-	background-image: url("https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_play_arrow_48px-16.png");
-	width: 16px;
-	height: 16px;
-	display: inline-block;
 }
 
 
@@ -62,4 +63,12 @@ table#library {
 	border: none;
 	float: left;
 	margin-right: 1em;
+}
+
+
+.icon-play {
+	background-image: url("https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_play_arrow_48px-16.png");
+	width: 16px;
+	height: 16px;
+	display: inline-block;
 }

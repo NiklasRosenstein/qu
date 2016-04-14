@@ -6,7 +6,7 @@
 		<script type="text/javascript" src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 	</head>
 	<body>
-		<div id="header">
+		<div id="playbar">
 			<div id="current">
 				<img id="current-album-pic" src="/static/img/nocover.png"></img>
 				<span id="current-track">No Track</span>
@@ -15,29 +15,30 @@
 			<audio id="audio" controls="controls"></audio>
 			</div>
 		</div>
-		<table id="library">
-			<thead>
+		<div id="library">
+			<table>
 				<tr>
 					<th></th>
-					<th></th>
-					<th>Title</th>
-					<th>Artist</th>
-					<th>Album</th>
-					<th>Genre</th>
+					<!--<th></th>-->
+					<th onclick="sortTracks('data-track-title')">Title</th>
+					<th onclick="sortTracks('data-track-artist')">Artist</th>
+					<th onclick="sortTracks('data-track-album')">Album</th>
+					<th onclick="sortTracks('data-track-genre')">Genre</th>
 				</tr>
 				{% for track in tracks %}
-				<tr id="track-{{ track.id }}" data-track-id="{{ track.id }}"
-					data-track-title="{{ track.title }}", data-track-artist="{{ track.artist }}"
-					data-track-album="{{ track.album }}">
-					<td><a class="icon icon-play" href="#" onclick="play({{ track.id }}, '{{ track.mime }}')"/></td>
-					<td><img src="/pic/{{ track.id }}" width="16" height="16"></td>
+				<tr class="track" id="track-{{ track.id }}" data-track-id="{{ track.id }}"
+					data-track-title="{{ track.title or "" }}", data-track-artist="{{ track.artist or "" }}"
+					data-track-album="{{ track.album or "" }}" data-track-genre="{{ track.genre or ""}}"
+					data-track-mime="{{ track.mime }}">
+					<td><a class="icon icon-play" href="#" onclick="play({{ track.id }})"/></td>
+					<!--<td><img src="/pic/{{ track.id }}" width="16" height="16"></td>-->
 					<td>{{ track.title }}</td>
 					<td>{{ track.artist or "" }}</td>
 					<td>{{ track.album or "" }}</td>
 					<td>{{ track.genre or "" }}</td>
 				</tr>
 				{% endfor %}
-			</tbody>
-		</table>
+			</table>
+		</div>
 	</body>
 </html>
