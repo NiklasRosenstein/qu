@@ -23,3 +23,5 @@ __DEPLOYMENT__
 __CREDITS__
 
     qu/web/static/img/nocover.png: http://gouki113.deviantart.com/art/No-Album-Art-145001929
+    qu/web/static/img/check.png,
+    qu/web/static/img/error.png: https://www.iconfinder.com/paomedia

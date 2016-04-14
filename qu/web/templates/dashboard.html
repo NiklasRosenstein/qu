@@ -19,7 +19,7 @@
 			<table>
 				<tr>
 					<th></th>
-					<!--<th></th>-->
+					<th></th>
 					<th onclick="sortTracks('data-track-title')">Title</th>
 					<th onclick="sortTracks('data-track-artist')">Artist</th>
 					<th onclick="sortTracks('data-track-album')">Album</th>
@@ -31,6 +31,7 @@
 					data-track-album="{{ track.album or "" }}" data-track-genre="{{ track.genre or ""}}"
 					data-track-mime="{{ track.mime }}">
 					<td><a class="icon icon-play" href="#" onclick="play({{ track.id }})"/></td>
+					<td><img width="12" src="{{ url_for('static', filename='img/check.png' if track.has_cover else 'img/error.png') }}"></td>
 					<!--<td><img src="/pic/{{ track.id }}" width="16" height="16"></td>-->
 					<td>{{ track.title }}</td>
 					<td>{{ track.artist or "" }}</td>
